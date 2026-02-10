@@ -204,6 +204,51 @@ Référentiel Excel (scope global)
 
 ---
 
+## Prochaines étapes
+
+### 1. Collecte des données (backend)
+
+- Charger le référentiel Excel (codes apps, profils P3/P4, entité)
+- Intégrer les APIs Fortify et Sonatype pour récupérer les findings
+- Clarifier le mapping entre référentiel et résultats de scans (code app ↔ projet technique)
+
+### 2. Modèle de données
+
+- Structurer un schéma unifié : référentiel + findings DEV (Security Defects) + findings PROD (Vulnerabilities)
+- Appliquer les filtres : CVSS > 7, profils P3/P4
+- Prévoir les champs pour le calcul des KPIs (domaine, criticité, scanner, dates…)
+
+### 3. Calcul des KPIs
+
+- Développer les scripts Python pour calculer les KPIs définis
+- Exporter les données agrégées dans un format exploitable par Power BI (CSV, Excel, base)
+
+### 4. Power BI — couche de visualisation
+
+Le dashboard sera probablement produit sous **Power BI** pour le partage et l'accessibilité.
+
+- Créer un rapport Power BI connecté aux données préparées (fichiers, base ou API)
+- Reproduire les maquettes (vue générale + vue détail)
+- Configurer les filtres (Entité, Période), slicers et navigation
+
+### Options d'architecture
+
+| Option | Intérêt |
+|--------|---------|
+| **Python → CSV/Excel → Power BI** | Simple, peu d'infra |
+| **Python → Base (SQLite/PostgreSQL) → Power BI** | Évolutif, historique |
+| **Power BI DirectQuery vers API** | Si une API d'agrégation est exposée |
+
+### Plan d'action proposé
+
+1. Valider le format du fichier Excel et les clés de jointure
+2. Documenter les APIs Fortify et Sonatype (endpoints, mapping code app)
+3. Prototyper en Python : chargement Excel + appels API + calcul KPIs + export CSV/Excel
+4. Créer un rapport Power BI pilote à partir des exports
+5. Automatiser (pipeline planifié) selon la fréquence de rafraîchissement souhaitée
+
+---
+
 ## Installation
 
 ```bash
