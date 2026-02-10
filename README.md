@@ -112,73 +112,95 @@ Référentiel Excel (scope global)
 
 ### Vue générale — Tableau de bord par entité
 
-#### En-tête
-- Titre : *ASLM — Suivi dette de sécurité*
-- Filtres : **Entité** (dropdown BU/direction/équipe), **Période** (T-1, T-3, plage de dates)
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│  ASLM — Suivi dette de sécurité              [Entité ▼]  [Période ▼]            │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  ┌───────────────────────┐ ┌───────────────────────┐ ┌───────────────────────┐  │
+│  │   Stock DEV           │ │   Stock PROD          │ │   Variation T-1→T     │  │
+│  │   Security Defects    │ │   Vulnerabilities     │ │                       │  │
+│  │                       │ │                       │ │      ↓ -12%           │  │
+│  │        247            │ │        189            │ │   (tendance)          │  │
+│  └───────────────────────┘ └───────────────────────┘ └───────────────────────┘  │
+│                                                                                 │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│  Détail par criticité                                                           │
+│  ┌─────────────────────────────────────┐ ┌─────────────────────────────────────┐│
+│  │ DEV    High: 180   Critical: 67     │ │ PROD  High: 142   Critical: 47     ││
+│  └─────────────────────────────────────┘ └─────────────────────────────────────┘│
+├─────────────────────────────────────────────────────────────────────────────────┤
+│  Top 5 codes apps les plus endettés                        [cliquer → détail]   │
+│  ┌─────┬──────────────────────┬────────────┬────────────┐                       │
+│  │  #  │ Code app             │ DEV        │ PROD       │                       │
+│  ├─────┼──────────────────────┼────────────┼────────────┤                       │
+│  │  1  │ APP-XXX-001          │    34      │    28      │  ← clic               │
+│  │  2  │ APP-XXX-002          │    22      │    19      │                       │
+│  │  3  │ APP-XXX-003          │    18      │    15      │                       │
+│  │  4  │ APP-XXX-004          │    14      │    12      │                       │
+│  │  5  │ APP-XXX-005          │    11      │     9      │                       │
+│  └─────┴──────────────────────┴────────────┴────────────┘                       │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│  Évolution (3 / 6 / 12 mois)                                                    │
+│  ┌─────────────────────────────────────────────────────────────────────────┐    │
+│  │     ╭──╮                    ╭──╮                                        │    │
+│  │   ╭─╯  ╰─╮  ╭──╮         ╭─╯  ╰─╮   Stock DEV  ─ ─ ─                   │    │
+│  │ ╭─╯      ╰─╯  ╰─╮     ╭─╯      ╰──  Stock PROD ─────                   │    │
+│  │ T-3      T-2     T-1    T                                                │    │
+│  └─────────────────────────────────────────────────────────────────────────┘    │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│  Adoption — Couverture                                                          │
+│  Scannés (DEV): 68% ████████████░░░░  │  Monitorés (PROD): 52% ████████░░░░░░  │
+│  Écart : 48 apps non couvertes                                                  │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
 
-#### Bloc 1 — KPIs principaux (3 cartes)
-| Carte | Contenu |
-|-------|---------|
-| Stock DEV | Nombre total Security Defects (CVSS>7, P3/P4) |
-| Stock PROD | Nombre total Vulnerabilities (CVSS>7, P3/P4) |
-| Variation | Évolution vs T-1 (flèche ↓ verte si baisse, ↑ rouge si hausse) |
-
-#### Bloc 2 — Détail par criticité
-- DEV : High / Critical
-- PROD : High / Critical
-
-#### Bloc 3 — Top 5 codes apps les plus endettés
-- Tableau : Rang | Code app | Stock DEV | Stock PROD
-- **Clic sur une ligne** → ouvre la vue détail du code app
-
-#### Bloc 4 — Graphique d'évolution
-- Courbes ou barres : Stock DEV et PROD sur 3 / 6 / 12 mois
-
-#### Bloc 5 — Adoption — Couverture
-- Taux de codes apps scannés (DEV)
-- Taux de codes apps monitorés (PROD)
-- Nombre d'apps non couvertes (écart)
-
-#### Principes de design
-- Couleurs : vert = réduction, rouge = augmentation
-- Hiérarchie visuelle : KPIs globaux en haut, détails en dessous
-- Responsive : cartes en grille qui se réorganisent selon la taille d'écran
+**Principes de design** : vert = réduction, rouge = augmentation — Responsive : cartes en grille
 
 ---
 
 ### Vue détail — Par code app
 
-#### Accès
-- Clic sur une ligne du **Top 5** → ouverture de la vue détail
-- Ou sélection via recherche / dropdown du code app
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│  ← Retour        Détail — APP-XXX-001                                            │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│  Fiche code app                                                                 │
+│  ┌───────────────────────────────────────────────────────────────────────────┐  │
+│  │  Code app: APP-XXX-001   │  Entité: XXX   │  Profil: P3  │  Pipelines: 4  │  │
+│  │  Dernier scan: 08/02/2025                                                 │  │
+│  └───────────────────────────────────────────────────────────────────────────┘  │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│  Stocks & évolution                                                             │
+│  ┌───────────────────────┐ ┌───────────────────────┐ ┌───────────────────────┐  │
+│  │ Security Defects      │ │ Vulnerabilities       │ │ Variation             │  │
+│  │ (DEV)                 │ │ (PROD)                │ │                       │  │
+│  │        34             │ │        28             │ │      ↓ -8%            │  │
+│  └───────────────────────┘ └───────────────────────┘ └───────────────────────┘  │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│  Par criticité              │  Par scanner                                       │
+│  DEV:  High 24  Crit. 10    │  Fortify SAST   DEV: 18  PROD: 14                 │
+│  PROD: High 20  Crit.  8    │  Sonatype SCA   DEV: 16  PROD: 14                 │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│  Historique (3 / 6 / 12 mois)                                                   │
+│  ┌─────────────────────────────────────────────────────────────────────────┐    │
+│  │     ╭──╮                                                                │    │
+│  │   ╭─╯  ╰─╮     Stock DEV  ─ ─ ─     Stock PROD ─────                    │    │
+│  │ ╭─╯      ╰──╮                                                           │    │
+│  │ T-3    T-2    T-1    T                                                    │    │
+│  └─────────────────────────────────────────────────────────────────────────┘    │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│  Liste des findings (optionnel)                                                 │
+│  ┌────┬──────────┬──────────┬───────┬──────────────────┬─────────┐             │
+│  │ ID │ Scanner  │ Domaine  │ CVSS  │ Description      │ Statut  │             │
+│  ├────┼──────────┼──────────┼───────┼──────────────────┼─────────┤             │
+│  │ 1  │ Fortify  │ DEV      │ 8.5   │ SQL injection    │ Ouvert  │             │
+│  │ 2  │ Sonatype │ PROD     │ 7.2   │ CVE-2024-...     │ Ouvert  │             │
+│  └────┴──────────┴──────────┴───────┴──────────────────┴─────────┘             │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
 
-#### Bloc 1 — Fiche code app
-- Code app, Entité, Profil (P3/P4)
-- Nombre de pipelines
-- Date du dernier scan
-
-#### Bloc 2 — Stocks & évolution
-- Security Defects (DEV)
-- Vulnerabilities (PROD)
-- Tendance (variation)
-
-#### Bloc 3 — Par criticité
-- DEV : High / Critical
-- PROD : High / Critical
-
-#### Bloc 4 — Par scanner
-- Fortify SAST : DEV / PROD
-- Sonatype SCA : DEV / PROD
-
-#### Bloc 5 — Historique
-- Graphique d'évolution des stocks pour ce code app (3 / 6 / 12 mois)
-
-#### Bloc 6 — Liste des findings (optionnel)
-- Tableau : ID | Scanner | Domaine | CVSS | Description | Statut
-- Drill-down vers les détails des findings
-
-#### Navigation
-- Bouton **← Retour vue générale** pour revenir au tableau de bord global
+**Accès** : clic sur une ligne du Top 5 ou sélection via recherche / dropdown
 
 ---
 
